@@ -39,6 +39,47 @@ where
         self.current_index += 1;
         self.source.next()
     }
+
+    fn eat_ident(&mut self, start: char) -> Token {
+        let mut ident_buffer = String::from(start);
+
+        while self.peek().is_some_and(|c| c.is_alphanumeric()) {
+            ident_buffer.push(self.advance().unwrap());
+        }
+
+        match ident_buffer.as_str() {
+            "if" => If,
+            "then" => Then,
+            "else" => Else,
+            "while" => While,
+            "do" => Do,
+            "skip" => Skip,
+            "true" => True,
+            "false" => False,
+            _ => Identifier,
+        }
+    }
+
+    fn eat_whitespaces(&mut self) -> Token {
+        while let Some(' ' | '\t') = self.peek() {
+            self.advance();
+        }
+        Whitespace
+    }
+
+    fn eat_numbers(&mut self) -> Token {
+        while self.peek().is_some_and(|c| c.is_ascii_digit()) {
+            self.advance().unwrap();
+        }
+        Literal
+    }
+
+    fn eat_linebreaks(&mut self) -> Token {
+        while let Some('\n' | '\r') = self.peek() {
+            self.advance();
+        }
+        Semicolon
+    }
 }
 
 impl<I> Iterator for Lexer<I>
@@ -48,6 +89,61 @@ where
     type Item = Result<Spanned<Token>, LexError>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        todo!()
+        let start = self.current_index;
+
+        let c = match self.advance() {
+            None => return None,
+            Some(t) => t,
+        };
+
+        let token = match c {
+            '(' => LeftParen,
+            ')' => RightParen,
+
+            '+' => Add,
+            '-' => Subtract,
+            '*' => Multiply,
+
+            '=' => Equal,
+            '&' => And,
+            '!' => Not,
+
+            '<' => {
+                if let Some(&'=') = self.peek() {
+                    self.advance();
+                    LessEqual
+                } else {
+                    Unknown
+                }
+            }
+
+            ':' => {
+                if let Some(&'=') = self.peek() {
+                    self.advance();
+                    Assign
+                } else {
+                    Unknown
+                }
+            }
+
+            '0'..='9' => self.eat_numbers(),
+
+            'a'..='z' | 'A'..='Z' => self.eat_ident(c),
+
+            ' ' | '\t' => self.eat_whitespaces(),
+
+            '\r' | '\n' | ';' => self.eat_linebreaks(),
+
+            _ => Unknown,
+        };
+
+        let span = Span(start, self.current_index);
+
+        let output = match token {
+            Unknown => Err(LexError::new("Unknown token".to_string(), span)),
+            t => Ok(Spanned { inner: t, span }),
+        };
+
+        Some(output)
     }
 }
