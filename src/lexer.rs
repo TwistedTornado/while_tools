@@ -1,3 +1,4 @@
+mod span;
 mod token;
 
 use std::iter::{Enumerate, Peekable};
