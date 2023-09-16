@@ -19,7 +19,7 @@ impl<I> Lexer<I>
 where
     I: Iterator<Item = char>,
 {
-    pub fn new<II: IntoIterator<Item = char, IntoIter = I>>(source: I) -> Self {
+    pub fn new<II: IntoIterator<Item = char, IntoIter = I>>(source: II) -> Self {
         Self {
             source: source.into_iter().peekable(),
             current_index: 0,
