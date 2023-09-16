@@ -9,5 +9,5 @@ pub struct Spanned<T> {
     pub span: Span,
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Span(pub usize, pub usize);
