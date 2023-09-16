@@ -1,3 +1,5 @@
+mod token;
+
 use std::iter::{Enumerate, Peekable};
 
 pub struct Lexer<I>
