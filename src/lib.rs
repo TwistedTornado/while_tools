@@ -3,4 +3,4 @@
 //! foundational concepts about computation and correctness. It is heavily
 //! inspired by a language described by C. A. Hoare in
 //! [An Axiomatic Basis for Computer Programming](https://dl.acm.org/doi/10.1145/363235.363259).
-mod lexer;
+pub mod lexer;
