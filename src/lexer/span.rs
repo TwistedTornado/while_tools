@@ -3,9 +3,11 @@
 //! Use `Spanned<T>` to associate a `T` with its span, and use `Span` for code
 //! that doesn't need the `T`.
 
+#[derive(Copy, Clone, Debug)]
 pub struct Spanned<T> {
-    inner: T,
-    span: Span,
+    pub inner: T,
+    pub span: Span,
 }
 
-pub struct Span(usize, usize);
+#[derive(Copy, Clone, Debug)]
+pub struct Span(pub usize, pub usize);
