@@ -2,10 +2,12 @@ mod lex_error;
 mod span;
 mod token;
 
-use crate::lexer::lex_error::LexError;
-use crate::lexer::span::{Span, Spanned};
-use crate::lexer::token::Token::{self, *};
+use crate::lexer::token::Token::*;
 use std::iter::Peekable;
+
+pub use crate::lexer::lex_error::LexError;
+pub use crate::lexer::span::{Span, Spanned};
+pub use crate::lexer::token::Token;
 
 pub struct Lexer<I>
 where
