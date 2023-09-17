@@ -11,3 +11,5 @@ by a language described by C. A. Hoare in
 Right now, the tools consist only of:
 
 - `while_tools::lexer` -- a module for lexing
+- `while_tools::ast` -- a module for working with an AST representation of a
+  While program
