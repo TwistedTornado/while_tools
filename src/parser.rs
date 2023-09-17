@@ -4,6 +4,9 @@ use crate::lexer::{Span, Spanned, Token};
 use crate::parser::parse_error::ParseError;
 use std::iter::Peekable;
 
+/// A parser that transforms a stream of tokens into an AST.
+/// Needs a reference to the source, to be able to extract identifiers and
+/// literal values.
 #[derive(Debug)]
 pub struct Parser<'a, I>
 where
