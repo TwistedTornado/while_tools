@@ -9,5 +9,11 @@ pub struct Spanned<T> {
     pub span: Span,
 }
 
+impl<T> Spanned<T> {
+    pub fn new(inner: T, span: Span) -> Self {
+        Self { inner, span }
+    }
+}
+
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Span(pub usize, pub usize);

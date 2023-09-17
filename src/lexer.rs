@@ -143,7 +143,7 @@ where
 
         let output = match token {
             Unknown => Err(LexError::new("Unknown token".to_string(), span)),
-            t => Ok(Spanned { inner: t, span }),
+            t => Ok(Spanned::new(t, span)),
         };
 
         Some(output)
