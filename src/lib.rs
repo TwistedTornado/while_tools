@@ -5,3 +5,4 @@
 //! [An Axiomatic Basis for Computer Programming](https://dl.acm.org/doi/10.1145/363235.363259).
 pub mod ast;
 pub mod lexer;
+pub mod parser;
