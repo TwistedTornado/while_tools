@@ -12,43 +12,43 @@ macro_rules! binary_node {
 
 #[macro_export]
 macro_rules! add {
-    ( $x:expr, $y: expr ) => {
-        binary_node!(Add, $x, $y)
+    ( $left:expr, $right: expr ) => {
+        binary_node!(Add, $left, $right)
     };
 }
 
 #[macro_export]
 macro_rules! sub {
-    ( $x:expr, $y: expr ) => {
-        binary_node!(Sub, $x, $y)
+    ( $left:expr, $right: expr ) => {
+        binary_node!(Sub, $left, $right)
     };
 }
 
 #[macro_export]
 macro_rules! mul {
-    ( $x:expr, $y: expr ) => {
-        binary_node!(Mul, $x, $y)
+    ( $left:expr, $right: expr ) => {
+        binary_node!(Mul, $left, $right)
     };
 }
 
 #[macro_export]
 macro_rules! less_eq {
     ( $left:expr, $right: expr ) => {
-        binary_node!(LessEq, $x, $y)
+        binary_node!(LessEq, $left, $right)
     };
 }
 
 #[macro_export]
 macro_rules! eq {
     ( $left:expr, $right: expr ) => {
-        binary_node!(Eq, $x, $y)
+        binary_node!(Eq, $right, $right)
     };
 }
 
 #[macro_export]
 macro_rules! and {
     ( $left:expr, $right: expr ) => {
-        binary_node!(And, $x, $y)
+        binary_node!(And, $right, $right)
     };
 }
 
