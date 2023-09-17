@@ -1,5 +1,7 @@
 //! A module for the abstract syntax tree (AST) that many tools will use.
 
+mod macros;
+
 /// A recursive type representing the AST. The AST itself stores no
 /// functionality or logic on how each node behaves -- that is the purview
 /// of other tools that use the AST, like the interpreter.
