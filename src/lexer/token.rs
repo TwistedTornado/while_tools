@@ -1,3 +1,9 @@
+/// A token resulting from the lexing process. They are stateless but may
+/// identify any portion of the source using [`Span`][span] or
+/// [`Spanned<T>`][spanned_t].
+///
+/// [span]: crate::lexer::Span
+/// [spanned_t]: crate::lexer::Spanned
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Token {
     // Groupings

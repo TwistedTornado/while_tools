@@ -1,3 +1,11 @@
+//! A module for lexing tools for While.
+//!
+//! This module provides a struct [`Lexer`] that takes an iterator over
+//! characters and is, itself, an [`Iterator`] that returns
+//! `Result<Spanned<Token>, ParseError>`.
+//!
+//! This module also provides various utility structs such as some`Span` types
+//! and a [`LexError`] type.
 mod lex_error;
 mod span;
 mod token;
@@ -9,6 +17,9 @@ pub use crate::lexer::lex_error::LexError;
 pub use crate::lexer::span::{Span, Spanned};
 pub use crate::lexer::token::Token;
 
+/// Lexes an incoming character stream. The resulting iterator contains no
+/// concrete information about literals or identifiers -- this can be accessed
+/// by using the `Span`s provided.
 pub struct Lexer<I>
 where
     I: Iterator<Item = char>,
@@ -38,11 +49,18 @@ where
     }
 
     fn advance(&mut self) -> Option<char> {
+        // Storing our own `current_index` rather than using an [`Enumerate`] is
+        // just a simpler and cleaner solution at the moment.
         self.current_index += 1;
         self.source.next()
     }
 
     fn eat_ident(&mut self, start: char) -> Token {
+        // Since we can't backtrack, we pass the recently-advanced character to
+        // this function. Unlike the other `eat_*` functions, it requires
+        // knowledge of all the characters in order to work out what Token
+        // to return.
+
         let mut ident_buffer = String::from(start);
 
         while self.peek().is_some_and(|c| c.is_alphanumeric()) {
