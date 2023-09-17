@@ -118,7 +118,7 @@ macro_rules! ident {
 
 #[macro_export]
 macro_rules! literal {
-    ( $x:expr) => {
+    ( $x:literal) => {
         Ast::Literal($x)
     };
 }
