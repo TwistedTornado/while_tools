@@ -6,7 +6,7 @@ use while_tools::parser::Parser;
 fn main() {
     // This is a basic example showing the pipeline as to how the source is
     // processed.
-    let source = "x := 5; while x <= 100 x := x + 1";
+    let source = "x := 5; while x <= 100 do x := x + 1";
 
     // First is the lexing. `Lexer` itself is an `Iterator`, so we can collect
     // on it directly. But we need to check for, and handle, `LexError`s.
