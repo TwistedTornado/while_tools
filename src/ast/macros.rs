@@ -48,7 +48,7 @@ macro_rules! eq {
 #[macro_export]
 macro_rules! and {
     ( $left:expr, $right: expr ) => {
-        binary_node!(And, $right, $right)
+        binary_node!(And, $left, $right)
     };
 }
 
