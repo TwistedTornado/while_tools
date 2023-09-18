@@ -41,7 +41,7 @@ macro_rules! less_eq {
 #[macro_export]
 macro_rules! eq {
     ( $left:expr, $right: expr ) => {
-        binary_node!(Eq, $right, $right)
+        binary_node!(Eq, $left, $right)
     };
 }
 
