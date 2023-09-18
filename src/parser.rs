@@ -157,7 +157,12 @@ where
 
         let (keyword, span) = match self.peek() {
             Some(Spanned { inner, span }) => (inner, span),
-            None => panic!("Unexpected end of token stream."),
+            None => {
+                return Err(ParseError {
+                    message: "Unexpected end of token stream".to_string(),
+                    span: Span(self.source.len() - 1, self.source.len()),
+                })
+            }
         };
 
         match keyword {
@@ -214,7 +219,12 @@ where
                 inner: Token::Identifier,
                 span,
             }) => span,
-            _ => panic!("Expected an LHS identifier"),
+            _ => {
+                return Err(ParseError {
+                    message: "Expected LHS Identifier".to_string(),
+                    span: Span(self.source.len() - 1, self.source.len()),
+                })
+            }
         };
         let ident = self.source[span.0..span.1].to_string();
 
@@ -288,14 +298,20 @@ where
             .peek()
             .is_some_and(|spanned| matches!(spanned.inner, Token::Subtract | Token::Add))
         {
-            let operator = self.advance().unwrap().inner;
+            let Spanned {
+                inner: operator,
+                span,
+            } = self.advance().unwrap();
             let right = self.factor()?;
 
             expr = match operator {
                 Token::Subtract => sub!(expr, right),
                 Token::Add => add!(expr, right),
                 _ => {
-                    panic!("Found {:?} | {expr:?}, {right:?}", operator)
+                    return Err(ParseError {
+                        message: "Unexpected operator".to_string(),
+                        span,
+                    })
                 }
             };
         }
