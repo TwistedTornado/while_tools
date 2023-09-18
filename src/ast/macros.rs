@@ -122,3 +122,17 @@ macro_rules! literal {
         Ast::Literal($x)
     };
 }
+
+#[macro_export]
+macro_rules! literal_true {
+    () => {
+        Ast::True
+    };
+}
+
+#[macro_export]
+macro_rules! literal_false {
+    () => {
+        Ast::False
+    };
+}
