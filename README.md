@@ -13,3 +13,4 @@ Right now, the tools consist only of:
 - `while_tools::lexer` -- a module for lexing
 - `while_tools::ast` -- a module for working with an AST representation of a
   While program
+- `while_tools::parser` -- a module for parsing a token stream into an AST
