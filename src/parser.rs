@@ -340,11 +340,17 @@ where
             Some(Spanned {
                 inner: Token::Subtract,
                 ..
-            }) => not!(self.unary()?),
+            }) => {
+                self.advance();
+                sub!(literal!(0), self.unary()?)
+            }
 
             Some(Spanned {
                 inner: Token::Not, ..
-            }) => sub!(literal!(0), self.unary()?),
+            }) => {
+                self.advance();
+                not!(self.unary()?)
+            }
 
             _ => self.primary()?,
         };
