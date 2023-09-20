@@ -1,18 +1,12 @@
-use crate::ast::Ast;
+use crate::ast::{Ast, Value};
 use crate::interpreter::state::State;
 
 mod context;
 pub mod interpret_error;
 pub mod state;
 
-pub enum Value {
-    I32(i32),
-    Bool(bool),
-    Unit,
-}
-
+use crate::ast::Value::*;
 use crate::interpreter::context::Context;
-use Value::*;
 
 use crate::interpreter::interpret_error::InterpretError;
 
@@ -39,16 +33,26 @@ impl Interpreter {
 
     fn interpret_ast(&mut self, ast: &Ast) -> Result<Value, InterpretError> {
         match ast {
-            Ast::Ass { ident, value } => match self.interpret_ast(value) {
-                // Currently, only integers can be assigned to variables. Maybe
-                // with the introduction of definitions, I can add support for
-                // them here too.
-                Ok(I32(x)) => {
-                    self.context.set_variable(ident.clone(), x);
-                    Ok(Unit)
-                }
-                _ => Err(InterpretError(format!("Bad RHS of Assign: {:?}", value))),
-            },
+            Ast::Ass { ident, value } => {
+                match value {
+                    ref x if !x.is_statement() => match self.interpret_ast(value) {
+                        Ok(I32(x)) => self.context.set_variable(ident.clone(), x),
+                        _ => return Err(InterpretError(format!("Bad RHS of Assign: {:?}", value))),
+                    },
+
+                    ref x if x.is_statement() => self
+                        .context
+                        .add_definition(ident.to_string(), *value.clone()),
+
+                    _ => panic!("Bad RHS of expression"),
+                };
+                Ok(Unit)
+            }
+
+            Ast::DefinitionRun { ident } => {
+                let referenced_ast = self.context.get_definition(&ident).unwrap().clone();
+                self.interpret_ast(&referenced_ast)
+            }
 
             Ast::Skip => Ok(Unit),
 

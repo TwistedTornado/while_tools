@@ -245,12 +245,40 @@ where
                 })
             }
         };
+
         let ident = self.source[span.0..span.1].to_string();
+
+        if let None
+        | Some(Spanned {
+            inner: Token::RightSemantic | Token::Semicolon,
+            ..
+        }) = self.peek()
+        {
+            // If the next token was ]] or ; then this was being used as a definition invocation.
+            // Should be able to be made more general, with all the
+            // other stmt-block terminators.
+            return Ok(Ast::DefinitionRun { ident });
+        }
 
         self.expect_token(Token::Assign)?;
 
+        let rhs = match self.peek() {
+            Some(Spanned {
+                inner: Token::LeftSemantic,
+                ..
+            }) => {
+                self.advance();
+                let rhs = ass_stmt!(ident, self.stmt_block()?);
+                self.expect_token(Token::RightSemantic);
+                rhs
+            }
+
+            Some(_) => ass_stmt!(ident, self.expression()?),
+            _ => unreachable!(),
+        };
+
         // Now we can find the RHS.
-        Ok(ass_stmt!(ident, self.expression()?))
+        Ok(rhs)
     }
 
     fn skip_stmt(&mut self) -> Result<Ast, ParseError> {

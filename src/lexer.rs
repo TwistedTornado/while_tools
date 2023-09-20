@@ -127,6 +127,22 @@ where
             '=' => Equal,
             '&' => And,
 
+            '[' => match self.peek() {
+                Some('[') => {
+                    self.advance();
+                    LeftSemantic
+                }
+                _ => Unknown,
+            },
+
+            ']' => match self.peek() {
+                Some(']') => {
+                    self.advance();
+                    RightSemantic
+                }
+                _ => Unknown,
+            },
+
             '!' => match self.peek() {
                 Some('=') => {
                     self.advance();

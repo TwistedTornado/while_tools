@@ -9,6 +9,8 @@ pub enum Token {
     // Groupings
     LeftParen,
     RightParen,
+    LeftSemantic,
+    RightSemantic,
 
     // Arithmetic operators
     Add,
