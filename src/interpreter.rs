@@ -44,7 +44,7 @@ impl Interpreter {
                         .context
                         .add_definition(ident.to_string(), *value.clone()),
 
-                    _ => panic!("Bad RHS of expression"),
+                    _ => return Err(InterpretError("Bad RHS of expression".to_string())),
                 };
                 Ok(Unit)
             }
