@@ -1,4 +1,4 @@
-x := 5; y := 19; b := 78
+x := 5; y := 19
 
 (while (x != y) do (
     if (x > y) then
