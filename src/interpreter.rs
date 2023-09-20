@@ -1,6 +1,7 @@
 use crate::ast::Ast;
 use crate::interpreter::state::State;
 
+mod context;
 pub mod interpret_error;
 pub mod state;
 
