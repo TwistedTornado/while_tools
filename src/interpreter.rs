@@ -35,12 +35,12 @@ impl Interpreter {
         match ast {
             Ast::Ass { ident, value } => {
                 match value {
-                    ref x if !x.is_statement() => match self.interpret_ast(value) {
+                    x if !x.is_statement() => match self.interpret_ast(value) {
                         Ok(I32(x)) => self.context.set_variable(ident.clone(), x),
                         _ => return Err(InterpretError(format!("Bad RHS of Assign: {:?}", value))),
                     },
 
-                    ref x if x.is_statement() => self
+                    x if x.is_statement() => self
                         .context
                         .add_definition(ident.to_string(), *value.clone()),
 
@@ -50,7 +50,7 @@ impl Interpreter {
             }
 
             Ast::DefinitionRun { ident } => {
-                let referenced_ast = self.context.get_definition(&ident);
+                let referenced_ast = self.context.get_definition(ident);
 
                 match referenced_ast {
                     Some(existing_ast) => Ok(self.interpret_ast(&existing_ast.clone())?),
@@ -163,7 +163,7 @@ impl Interpreter {
                 Ok(I32(left_inner * right_inner))
             }
             Ast::Literal(x) => Ok(I32(*x)),
-            Ast::Ident(i) => Ok(I32(self.context.get_variable(&i))),
+            Ast::Ident(i) => Ok(I32(self.context.get_variable(i))),
         }
     }
 }
