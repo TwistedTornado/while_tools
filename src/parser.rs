@@ -110,6 +110,16 @@ where
     fn stmt_block(&mut self) -> Result<Ast, ParseError> {
         // <stmt_block> ::= <statement> (";" <statement>)* ";"?
 
+        // This is temporary, to allow multiline source files.
+        // Internally, newlines are condensed to semicolons more liberally than
+        // suitable, so the ASI logic needs to be expanded upon.
+        while self
+            .peek()
+            .is_some_and(|Spanned { inner, .. }| inner == &Token::Semicolon)
+        {
+            self.advance();
+        }
+
         let mut stmt = self.statement()?;
 
         // If the next token is a semicolon, remove it and find the next <statement>.
