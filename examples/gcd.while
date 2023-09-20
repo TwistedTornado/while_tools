@@ -1,14 +1,10 @@
-x := 120;
-y := 56;
+x := 5; y := 19; b := 78
 
-(
-    while !(x = y) do
-    (
-        if !(x <= y) then
-            x := x - y
-        else
-            y := y - x
-    )
-)
+(while (x != y) do (
+    if (x > y) then
+        x := x - y
+    else
+        y := y - x
+))
 
 z := x
