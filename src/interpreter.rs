@@ -11,6 +11,7 @@ pub enum Value {
     Unit,
 }
 
+use crate::interpreter::context::Context;
 use Value::*;
 
 use crate::interpreter::interpret_error::InterpretError;
@@ -18,14 +19,14 @@ use crate::interpreter::interpret_error::InterpretError;
 /// A tree-walk interpreter. The interpreter doesn't
 /// modify the AST.
 pub struct Interpreter {
-    state: State,
+    context: Context,
     ast: Ast,
 }
 
 impl Interpreter {
     pub fn new(ast: Ast) -> Self {
         Self {
-            state: State::new(),
+            context: Context::new(),
             ast,
         }
     }
@@ -33,7 +34,7 @@ impl Interpreter {
     pub fn interpret(&mut self) -> Result<State, InterpretError> {
         self.interpret_ast(&self.ast.clone())?;
 
-        Ok(self.state.clone())
+        Ok(self.context.state.clone())
     }
 
     fn interpret_ast(&mut self, ast: &Ast) -> Result<Value, InterpretError> {
@@ -43,7 +44,7 @@ impl Interpreter {
                 // with the introduction of definitions, I can add support for
                 // them here too.
                 Ok(I32(x)) => {
-                    self.state.set(ident.clone(), x);
+                    self.context.set_variable(ident.clone(), x);
                     Ok(Unit)
                 }
                 _ => Err(InterpretError(format!("Bad RHS of Assign: {:?}", value))),
@@ -151,7 +152,7 @@ impl Interpreter {
                 Ok(I32(left_inner * right_inner))
             }
             Ast::Literal(x) => Ok(I32(*x)),
-            Ast::Ident(i) => Ok(I32(self.state.get(&i))),
+            Ast::Ident(i) => Ok(I32(self.context.get_variable(&i))),
         }
     }
 }
