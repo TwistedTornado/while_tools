@@ -8,7 +8,7 @@ use std::fmt::{Display, Formatter};
 /// If a value doesn't exist, 0 is returned.
 ///
 /// Explicit settings of values to 0 show up in the end Display, but gets on their own, don't.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Default)]
 pub struct State {
     mappings: HashMap<String, i32>,
 }
