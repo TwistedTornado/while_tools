@@ -50,8 +50,15 @@ impl Interpreter {
             }
 
             Ast::DefinitionRun { ident } => {
-                let referenced_ast = self.context.get_definition(&ident).unwrap().clone();
-                self.interpret_ast(&referenced_ast)
+                let referenced_ast = self.context.get_definition(&ident);
+
+                match referenced_ast {
+                    Some(existing_ast) => Ok(self.interpret_ast(&existing_ast.clone())?),
+                    None => Err(InterpretError(format!(
+                        "Definition {} not defined yet",
+                        ident
+                    ))),
+                }
             }
 
             Ast::Skip => Ok(Unit),
