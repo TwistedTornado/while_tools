@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fmt::{Display, Formatter};
 
 /// A representation of the mathematical notion of state in While. It's a wrapper over a HashMap.
 ///
@@ -32,5 +33,23 @@ impl State {
     /// Performs an assignment for a given ident.
     pub fn set(&mut self, ident: String, val: i32) {
         self.mappings.insert(ident, val);
+    }
+}
+
+impl Display for State {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let mut entries = self.mappings.iter().collect::<Vec<_>>();
+
+        // Sort the keys alphabetically, since this isn't guaranteed otherwise.
+        // This makes comparison-by-eye easier.
+        entries.sort_by(|a, b| (a.0).cmp(b.0));
+
+        let output_str = entries
+            .into_iter()
+            .map(|(ident, val)| format!("{ident} -> {val}"))
+            .reduce(|a, b| a + ", " + &b)
+            .unwrap_or("".to_string());
+
+        write!(f, "[{}]", output_str)
     }
 }
