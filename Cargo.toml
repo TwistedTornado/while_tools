@@ -2,6 +2,10 @@
 name = "while_tools"
 version = "0.5.0"
 edition = "2021"
+description = "A set of tools for While, a language for an axiomatic system of program correctness"
+readme = "README.md"
+repository = "https://github.com/TwistedTornado/while_tools"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
