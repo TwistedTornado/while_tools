@@ -91,7 +91,7 @@ fn main() {
     let result = Interpreter::new(ast).interpret();
 
     match result {
-        Ok(state) => println!("Interpreted. {:?}", state),
+        Ok(state) => println!("Interpreted. {state}"),
         Err(e) => println!("{e}"),
     }
 }
