@@ -366,7 +366,7 @@ where
         let Some(Spanned { inner, span }) = self.advance() else {
             // Some issues may arise if I go past self.source.len(), even though
             // it may make error annotation some time in the potential future
-            // offset by for this specific issue.
+            // offset by 1 for this specific issue.
             return Err(ParseError {
                 message: "Reached end of token stream".to_string(),
                 span: Span(self.source.len() - 1, self.source.len()),
