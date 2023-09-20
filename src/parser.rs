@@ -189,7 +189,7 @@ where
             }
             _ => Err(ParseError {
                 message: format!("Found {keyword:?}"),
-                span: span.clone(),
+                span: *span,
             }),
         }
     }
