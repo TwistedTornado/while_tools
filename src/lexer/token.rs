@@ -23,7 +23,11 @@ pub enum Token {
 
     // Comparison and equality operators
     Equal,
+    NotEqual,
     LessEqual,
+    LessThan,
+    GreaterEqual,
+    GreaterThan,
     Not,
     And,
 

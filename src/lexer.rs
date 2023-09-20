@@ -126,19 +126,33 @@ where
 
             '=' => Equal,
             '&' => And,
-            '!' => Not,
 
-            '<' => {
-                if let Some(&'=') = self.peek() {
+            '!' => match self.peek() {
+                Some('=') => {
+                    self.advance();
+                    NotEqual
+                }
+                _ => Not,
+            },
+
+            '<' => match self.peek() {
+                Some('=') => {
                     self.advance();
                     LessEqual
-                } else {
-                    Unknown
                 }
-            }
+                _ => LessThan,
+            },
+
+            '>' => match self.peek() {
+                Some('=') => {
+                    self.advance();
+                    GreaterEqual
+                }
+                _ => GreaterThan,
+            },
 
             ':' => {
-                if let Some(&'=') = self.peek() {
+                if let Some('=') = self.peek() {
                     self.advance();
                     Assign
                 } else {

@@ -7,6 +7,7 @@ use crate::{
     add, and, ass_stmt, binary_node, comp_stmt, eq, if_stmt, less_eq, literal, mul, not, sub,
     while_stmt,
 };
+
 use std::iter::Peekable;
 
 /// A parser that transforms a stream of tokens into an AST.
@@ -272,30 +273,53 @@ where
     }
 
     fn equality(&mut self) -> Result<Ast, ParseError> {
-        // <equality> ::= <comparison> ( "=" <comparison> )?
+        // <equality> ::= <comparison> ( ( "=" | "!=" ) <comparison> )?
 
         let mut expr = self.comparison()?;
 
-        if self.peek().is_some_and(|ti| ti.inner == Token::Equal) {
-            let _operator = self.advance();
+        if self
+            .peek()
+            .is_some_and(|ti| matches!(ti.inner, Token::Equal | Token::NotEqual))
+        {
+            let operator = self.advance();
             let rhs = self.comparison()?;
 
-            expr = eq!(expr, rhs)
+            expr = match operator.unwrap().inner {
+                Token::Equal => eq!(expr, rhs),
+                Token::NotEqual => not!(eq!(expr, rhs)),
+                _ => unreachable!(),
+            }
         }
 
         Ok(expr)
     }
 
     fn comparison(&mut self) -> Result<Ast, ParseError> {
-        // <comparison> ::= <term> ( "<=" <term> )?
+        // <comparison> ::= <term> ( ( "<=" | "<" | ">" | ">=" ) <term> )?
 
         let mut expr = self.term()?;
 
-        if self.peek().is_some_and(|ti| ti.inner == Token::LessEqual) {
-            let _operator = self.advance();
+        if self.peek().is_some_and(|ti| {
+            matches!(
+                ti.inner,
+                Token::LessEqual | Token::LessThan | Token::GreaterEqual | Token::GreaterThan
+            )
+        }) {
+            let operator = self.advance().unwrap().inner;
             let rhs = self.term()?;
 
-            expr = less_eq!(expr, rhs)
+            expr = match operator {
+                // a <= b == a <= b
+                Token::LessEqual => less_eq!(expr, rhs),
+                // a < b == !(b <= a)
+                Token::LessThan => not!(less_eq!(rhs, expr)),
+                // a >= b == (b <= a)
+                Token::GreaterEqual => less_eq!(rhs, expr),
+                // a > b == !(a <= b)
+                Token::GreaterThan => not!(less_eq!(expr, rhs)),
+
+                _ => unreachable!(),
+            }
         }
         Ok(expr)
     }
