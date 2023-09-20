@@ -1,8 +1,8 @@
 use crate::ast::Ast;
 use crate::interpreter::state::State;
 
-mod interpret_error;
-mod state;
+pub mod interpret_error;
+pub mod state;
 
 pub enum Value {
     I32(i32),
