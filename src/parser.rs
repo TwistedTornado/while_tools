@@ -4,8 +4,8 @@ use crate::ast::Ast;
 use crate::lexer::{Span, Spanned, Token};
 use crate::parser::parse_error::ParseError;
 use crate::{
-    add, and, ass_stmt, binary_node, comp_stmt, eq, if_stmt, less_eq, literal, mul, not, sub,
-    while_stmt,
+    add, and, ass_stmt, binary_node, comp_stmt, eq, if_stmt, less_eq, literal, mul, not, skip_stmt,
+    sub, while_stmt,
 };
 
 use std::iter::Peekable;
@@ -195,7 +195,7 @@ where
     }
 
     fn if_stmt(&mut self) -> Result<Ast, ParseError> {
-        // <if_stmt> ::= "if" <expression> "then" <stmt_block> "else" <stmt_block>
+        // <if_stmt> ::= "if" <expression> "then" <stmt_block> ( "else" <stmt_block> )?
 
         self.expect_token(Token::If)?;
         let cond = self.expression()?;
@@ -203,10 +203,18 @@ where
         self.expect_token(Token::Then)?;
         let block_true = self.stmt_block()?;
 
-        self.expect_token(Token::Else)?;
-        let block_false = self.stmt_block()?;
+        let result = if let Some(Spanned {
+            inner: Token::Else, ..
+        }) = self.peek()
+        {
+            self.advance();
+            let block_false = self.stmt_block()?;
+            if_stmt!(cond, block_true, block_false)
+        } else {
+            if_stmt!(cond, block_true, skip_stmt!())
+        };
 
-        Ok(if_stmt!(cond, block_true, block_false))
+        Ok(result)
     }
 
     fn while_stmt(&mut self) -> Result<Ast, ParseError> {
