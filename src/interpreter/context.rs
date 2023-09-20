@@ -22,7 +22,7 @@ impl Context {
         self.definitions.insert(name, definition);
     }
 
-    pub fn get_definition(&mut self, name: &str) -> Option<&Ast> {
+    pub fn get_definition(&self, name: &str) -> Option<&Ast> {
         self.definitions.get(name)
     }
 
@@ -30,7 +30,7 @@ impl Context {
         self.state.set(name, value);
     }
 
-    pub fn get_variable(&mut self, name: &str) -> i32 {
+    pub fn get_variable(&self, name: &str) -> i32 {
         self.state.get(name)
     }
 }
