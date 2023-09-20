@@ -1,12 +1,7 @@
-use while_tools::ast::Ast;
 use while_tools::interpreter::state::State;
 use while_tools::interpreter::Interpreter;
 use while_tools::lexer::Lexer;
 use while_tools::parser::*;
-use while_tools::{
-    ass_stmt, binary_node, comp_stmt, ident, if_stmt, less_eq, literal, literal_true, skip_stmt,
-    while_stmt,
-};
 
 /// Almost like a procedural macro to make the pipeline of running a program
 /// more DRY.
