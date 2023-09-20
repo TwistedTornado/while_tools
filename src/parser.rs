@@ -269,7 +269,7 @@ where
             }) => {
                 self.advance();
                 let rhs = ass_stmt!(ident, self.stmt_block()?);
-                self.expect_token(Token::RightSemantic);
+                self.expect_token(Token::RightSemantic)?;
                 rhs
             }
 
