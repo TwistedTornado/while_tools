@@ -177,6 +177,6 @@ of the code.
 - Be careful when copying examples from the handbook over into a text file, as
   some symbols (particularly `-`) are subtly different. The PDF sometimes uses
   − (`Minus Sign (U+2212)`) whereas your keyboard (and the interpreter) use
-  - (`Hyphen-Minus (U+002D)`).
+  \- (`Hyphen-Minus (U+002D)`).
 - The interpreter does not yet support arrays, nor does it have a robust enough
   type system to support them.
