@@ -70,15 +70,15 @@ pub enum Ast {
 
 impl Ast {
     pub fn is_statement(&self) -> bool {
-        match self {
+        matches!(
+            self,
             Ast::Ass { .. }
-            | Ast::Comp { .. }
-            | Ast::While { .. }
-            | Ast::DefinitionRun { .. }
-            | Ast::Skip
-            | Ast::If { .. } => true,
-            _ => false,
-        }
+                | Ast::Comp { .. }
+                | Ast::While { .. }
+                | Ast::DefinitionRun { .. }
+                | Ast::Skip
+                | Ast::If { .. }
+        )
     }
 }
 
