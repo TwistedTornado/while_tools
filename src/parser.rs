@@ -142,7 +142,7 @@ where
             match self.peek() {
                 None
                 | Some(Spanned {
-                    inner: Token::RightParen | Token::Else,
+                    inner: Token::RightParen | Token::Else | Token::RightSemantic,
                     ..
                 }) => break,
                 _ => {}
