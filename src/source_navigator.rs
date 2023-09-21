@@ -54,6 +54,39 @@ impl<'a> SourceNavigator<'a> {
 
         &self.source[this_line_start..next_line_start - 1].trim()
     }
+
+    /// Given a span, returns the line containing that span, with the span
+    /// content underlined.
+    pub fn get_annotated_span(&self, Span(a, b): Span) -> String {
+        let FilePos2d {
+            row: row1,
+            col: col1,
+        } = self.get_position(a);
+
+        let FilePos2d {
+            row: _row2,
+            col: col2,
+        } = self.get_position(b);
+
+        // The big assumption in this function is that the span doesn't cross
+        // lines.
+
+        let line_content = self.get_line(row1);
+
+        let line_start = self.line_heads[row1];
+        let line_end = line_start + line_content.len();
+
+        let start_to_span = a - line_start;
+        let span_to_end = if line_end < b { 0 } else { line_end - b };
+
+        let line_marker = format!("{} | ", row1 + 1);
+
+        let underline = " ".repeat(start_to_span + line_marker.len())
+            + &"-".repeat(col2 - col1)
+            + &" ".repeat(span_to_end);
+
+        format!("{line_marker}{line_content}\n{underline}")
+    }
 }
 
 #[derive(Copy, Clone, Debug)]

@@ -5,6 +5,7 @@ use while_tools::interpreter::Interpreter;
 
 use while_tools::lexer::Lexer;
 use while_tools::parser::Parser;
+use while_tools::utils::SourceNavigator;
 
 fn main() {
     // This is a basic example showing the pipeline as to how the source is
@@ -64,6 +65,10 @@ fn main() {
         }
         Err(e) => {
             println!("{e}");
+            let sn = SourceNavigator::new(&source_string);
+            let errored_line = sn.get_annotated_span(e.span);
+
+            println!("\n{errored_line}");
             exit(0);
         }
     };
@@ -74,10 +79,23 @@ fn main() {
     println!("\nParsing...");
     let mut parser = Parser::new(&source_string, result);
 
+    // let ast = match parser.parse() {
+    //     Ok(ast) => ast,
+    //     Err(msg) => {
+    //         println!("Error: {msg}");
+    //         exit(0)
+    //     }
+    // };
+
     let ast = match parser.parse() {
         Ok(ast) => ast,
-        Err(msg) => {
-            println!("Error: {msg}");
+        Err(e) => {
+            println!("{e}");
+
+            let sn = SourceNavigator::new(&source_string);
+            let errored_line = sn.get_annotated_span(e.span);
+
+            println!("\n{errored_line}");
             exit(0)
         }
     };
