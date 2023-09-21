@@ -16,7 +16,6 @@ impl<'a> SourceNavigator<'a> {
             .chain(
                 source
                     .chars()
-                    .into_iter()
                     .enumerate()
                     .filter(|(_, c)| c == &'\n')
                     .map(|(idx, _)| idx + 1),
@@ -33,7 +32,7 @@ impl<'a> SourceNavigator<'a> {
             .iter()
             .zip(self.line_heads.iter().skip(1))
             .enumerate()
-            .find(|(_, (_, next_head))| !(**next_head < index))
+            .find(|(_, (_, next_head))| **next_head >= index)
             .unwrap();
 
         FilePos2d {
@@ -52,7 +51,7 @@ impl<'a> SourceNavigator<'a> {
             .unwrap_or(&self.source.len())
             .to_owned();
 
-        &self.source[this_line_start..next_line_start - 1].trim()
+        self.source[this_line_start..next_line_start - 1].trim()
     }
 
     /// Given a span, returns the line containing that span, with the span
