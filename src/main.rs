@@ -13,7 +13,7 @@ fn main() {
     // Getting a handle on the file.
     println!("Opening file...");
 
-    let file_path = "examples/gcd.while";
+    let file_path = "examples/main.while";
 
     let mut file = match File::open(file_path) {
         Ok(f) => {
