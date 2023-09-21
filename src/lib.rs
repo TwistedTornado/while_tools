@@ -7,3 +7,9 @@ pub mod ast;
 pub mod interpreter;
 pub mod lexer;
 pub mod parser;
+mod source_navigator;
+
+pub mod utils {
+    use crate::source_navigator;
+    pub use source_navigator::SourceNavigator;
+}
