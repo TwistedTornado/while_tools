@@ -26,3 +26,9 @@ impl<'a> SourceNavigator<'a> {
         Self { source, line_heads }
     }
 }
+
+#[derive(Copy, Clone, Debug)]
+pub struct FilePos2d {
+    row: usize,
+    col: usize,
+}
