@@ -140,7 +140,7 @@ impl Interpreter {
             }
             Ast::And { left, right } => {
                 let Ok(Bool(left_inner)) = self.interpret_ast(left) else { return Err(InterpretError("LHS is not boolean".to_string())) };
-                let Ok(Bool(right_inner)) = self.interpret_ast(right) else { return Err(InterpretError("LHS is not boolean".to_string())) };
+                let Ok(Bool(right_inner)) = self.interpret_ast(right) else { return Err(InterpretError("RHS is not boolean".to_string())) };
 
                 Ok(Bool(left_inner && right_inner))
             }
@@ -158,7 +158,7 @@ impl Interpreter {
             }
             Ast::Mul { left, right } => {
                 let Ok(I32(left_inner)) = self.interpret_ast(left) else { return Err(InterpretError("LHS is not arithmetic".to_string())) };
-                let Ok(I32(right_inner)) = self.interpret_ast(right) else { return Err(InterpretError("LHS is not arithmetic".to_string())) };
+                let Ok(I32(right_inner)) = self.interpret_ast(right) else { return Err(InterpretError("RHS is not arithmetic".to_string())) };
 
                 Ok(I32(left_inner * right_inner))
             }
